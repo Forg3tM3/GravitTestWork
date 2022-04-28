@@ -1,0 +1,21 @@
+{
+  "name": "gravittestwork",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=14.0.0 <17.0.0"
+  },
+  "scripts": {
+    "dev": "engine-version && lerna run dev --parallel --no-bail",
+    "build": "engine-version && npm run build --workspaces --if-present",
+    "start": "engine-version && lerna run start --parallel --no-bail",
+    "format": "npm run format --workspaces --if-present"
+  },
+  "dependencies": {
+    "lerna": "^4.0.0",
+    "engine-version": "^1.0.2"
+  }
+}
