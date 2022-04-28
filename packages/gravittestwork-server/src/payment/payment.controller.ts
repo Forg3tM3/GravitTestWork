@@ -16,11 +16,6 @@ export class PaymentController {
     return this.paymentService.find(username)
   }
 
-  @Patch("byUsername")
-  updateUser(@Body() body: PaymentInput) {
-    return this.paymentService.updateUser(body)
-  }
-
   @Delete(":ids")
   afterGive(@Param("ids", new ParseArrayPipe({ items: Number })) ids: number[]) {
     return this.paymentService.afterGive(ids)

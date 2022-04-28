@@ -5,38 +5,19 @@ import { PaymentInput } from "./dto/payment.input";
 import { PaymentStatus } from "./payment-status.enum";
 import { Payment } from "./payment.entity";
 import * as _ from "lodash"
-import { User } from "src/users.entity";
 
 @Injectable()
 export class PaymentService {
   constructor (
-    @InjectRepository(Payment) private paymentRepo: Repository<Payment>,
-    @InjectRepository(User) private usersRepo: Repository<User>
+    @InjectRepository(Payment) private paymentRepo: Repository<Payment>
   ) {}
 
   private getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
   }
 
-  async find(username: string): Promise<number> {
-    var user = await this.usersRepo.findOne(username)
-    
-    if (!user) 
-      return 0
-
-    return user.amount
-  }
-
-  async updateUser(input: PaymentInput): Promise<boolean> {
-    var user = await this.usersRepo.findOne(input.username)
-    
-    if (!user) 
-      return true
-
-    user.amount = input.amount
-
-    await this.usersRepo.save(user)
-    return true
+  async find(username: string): Promise<Payment[]> {
+    return this.paymentRepo.find({ username, status: PaymentStatus.SUCCESS })
   }
 
   async findOne(id: number): Promise<Payment> {
@@ -71,18 +52,6 @@ export class PaymentService {
     payment.status = PaymentStatus.SUCCESS
     payment.amount = Math.ceil(this.getRandomArbitrary(0.7, 1.7) * payment.amount)
 
-
-    var user = await this.usersRepo.findOne(payment.username)
-    
-    if (!user) {
-      user = new User()
-      user.username = payment.username
-      user.amount = payment.amount
-    } else {
-      user.amount += payment.amount
-    }
-
-    await this.usersRepo.save(user)
     return this.paymentRepo.save(payment)
   }
 
