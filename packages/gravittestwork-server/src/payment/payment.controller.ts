@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseArrayPipe, ParseIntPipe, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseArrayPipe, ParseIntPipe, Patch, Post } from "@nestjs/common";
 import { PaymentInput } from "./dto/payment.input";
 import { PaymentService } from "./payment.service";
 
@@ -14,6 +14,11 @@ export class PaymentController {
   @Get("byUsername/:username")
   find(@Param("username") username: string) {
     return this.paymentService.find(username)
+  }
+
+  @Patch("byUsername")
+  updateUser(@Body() body: PaymentInput) {
+    return this.paymentService.updateUser(body)
   }
 
   @Delete(":ids")
